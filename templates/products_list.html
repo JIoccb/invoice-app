@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Товары</h2>
+<form method="get">
+    <div class="row">
+        <div style="flex:1">
+            <label>SKU</label>
+            <input type="text" name="sku" value="{{ sku|e }}">
+        </div>
+        <div style="flex:2">
+            <label>Название содержит</label>
+            <input type="text" name="name" value="{{ name|e }}">
+        </div>
+        <div><label>&nbsp;</label>
+            <button class="btn btn-secondary" type="submit">Искать</button>
+        </div>
+        <div><label>&nbsp;</label><a class="btn btn-primary" href="{{ url_for('products_create') }}">+ Новый товар</a>
+        </div>
+    </div>
+</form>
+
+{% if form %}
+<h3>{{ 'Новый товар' if create_mode else 'Редактирование товара' }}</h3>
+<form method="post" novalidate>
+    {{ form.csrf_token }}
+    <div class="row">
+        <div style="flex:1">{{ form.sku.label }} {{ form.sku(readonly=not create_mode) }}</div>
+        <div style="flex:2">{{ form.name.label }} {{ form.name() }}</div>
+    </div>
+    <div class="row">
+        <div style="flex:1">{{ form.unit.label }} {{ form.unit() }}</div>
+        <div style="flex:1">{{ form.weight.label }} {{ form.weight() }}</div>
+    </div>
+    <div class="row">
+        <div style="flex:1">{{ form.shelf_life_days.label }} {{ form.shelf_life_days() }}</div>
+    </div>
+    <div class="row">
+        <div style="flex:1">{{ form.storage_conditions.label }} {{ form.storage_conditions(rows=3) }}</div>
+    </div>
+    <button class="btn btn-primary" type="submit">{{ form.submit.label.text }}</button>
+    <a class="btn btn-secondary" href="{{ url_for('products_list') }}">Отмена</a>
+</form>
+{% endif %}
+
+<h3 style="margin-top:16px;">Список</h3>
+<table>
+    <tr>
+        <th>SKU</th>
+        <th>Название</th>
+        <th>Ед.</th>
+        <th>Вес</th>
+        <th>Срок годн., дн.</th>
+        <th></th>
+    </tr>
+    {% for it in items %}
+    <tr>
+        <td>{{ it.sku }}</td>
+        <td>{{ it.name }}</td>
+        <td>{{ it.unit }}</td>
+        <td>{{ it.weight or '' }}</td>
+        <td>{{ it.shelf_life_days or '' }}</td>
+        <td>
+            <a class="btn btn-secondary" href="{{ url_for('products_edit', sku=it.sku) }}">Ред.</a>
+            <form method="post" action="{{ url_for('products_delete', sku=it.sku) }}" style="display:inline"
+                  onsubmit="return confirm('Удалить?')">
+                {{ csrf_token() }}
+                <button class="btn btn-danger" type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="6">Не найдено</td>
+    </tr>
+    {% endfor %}
+</table>
+<div class="pagination">
+    {% for p in range(1, pages+1) %}
+    {% if p == page %}<span class="active">{{ p }}</span>
+    {% else %}<a href="{{ url_for('products_list', page=p, per_page=per_page, sku=sku, name=name) }}">{{ p }}</a>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

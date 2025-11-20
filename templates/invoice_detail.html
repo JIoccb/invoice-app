@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Счёт № {{ invoice.num }} от {{ invoice.doc_date }}</h2>
+<p>Покупатель: {{ invoice.buyer_company.name if invoice.buyer_company else '' }}</p>
+<p>Статус: {{ invoice.status }}</p>
+<p>Сумма: {{ "%.2f"|format(invoice.total_amount or 0) }}</p>
+
+<h3>Позиции</h3>
+<table>
+    <tr>
+        <th>#</th>
+        <th>SKU</th>
+        <th>Название</th>
+        <th>Qty</th>
+        <th>Цена</th>
+        <th>Сумма</th>
+    </tr>
+    {% for idx, line in enumerate(invoice.lines, start=1) %}
+    <tr>
+        <td>{{ idx }}</td>
+        <td>{{ line.product_sku }}</td>
+        <td>{{ line.product.name if line.product else '' }}</td>
+        <td>{{ line.quantity }}</td>
+        <td>{{ "%.2f"|format(line.price) }}</td>
+        <td>{{ "%.2f"|format(line.quantity * line.price) }}</td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="6">Нет позиций</td>
+    </tr>
+    {% endfor %}
+</table>
+<a class="btn btn-secondary" href="{{ url_for('invoices_list') }}">Назад к списку</a>
+{% endblock %}

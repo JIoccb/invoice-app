@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ 'Новая компания' if mode=='create' else 'Редактирование компании' }}</h2>
+<form method="post" novalidate>
+    {{ form.csrf_token }}
+    <div class="row">
+        <div style="flex:1">{{ form.company_id.label }} {{ form.company_id() }}</div>
+        <div style="flex:2">{{ form.name.label }} {{ form.name() }}</div>
+    </div>
+    <div class="row">
+        <div style="flex:1">{{ form.inn_kpp.label }} {{ form.inn_kpp() }}</div>
+        <div style="flex:1">{{ form.phone.label }} {{ form.phone() }}</div>
+    </div>
+    <div class="row">
+        <div style="flex:1">{{ form.email.label }} {{ form.email() }}</div>
+        <div style="flex:1">{{ form.contact_name.label }} {{ form.contact_name() }}</div>
+    </div>
+    <div class="row">
+        <div style="flex:1">{{ form.address.label }} {{ form.address(rows=3) }}</div>
+    </div>
+    <button class="btn btn-primary" type="submit">{{ form.submit.label.text }}</button>
+    <a class="btn btn-secondary" href="{{ url_for('companies_list') }}">Отмена</a>
+</form>
+{% endblock %}

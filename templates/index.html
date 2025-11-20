@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Панель</h2>
+<div class="grid grid-3">
+    <div class="stat">Компаний: <strong>{{ total_companies }}</strong></div>
+    <div class="stat">Товаров: <strong>{{ total_products }}</strong></div>
+    <div class="stat">Счетов: <strong>{{ total_invoices }}</strong></div>
+</div>
+<h3 style="margin-top:18px;">Популярные товары (по сумме qty)</h3>
+<table>
+    <tr>
+        <th>SKU</th>
+        <th>Название</th>
+        <th>Суммарное количество</th>
+    </tr>
+    {% for sku, name, qty_sum in top_products %}
+    <tr>
+        <td>{{ sku }}</td>
+        <td>{{ name }}</td>
+        <td>{{ qty_sum }}</td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="3">Нет данных</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3 style="margin-top:18px;">Последние счета</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Номер</th>
+        <th>Дата</th>
+        <th>Покупатель</th>
+        <th>Сумма</th>
+    </tr>
+    {% for inv in recent_invoices %}
+    <tr>
+        <td><a href="{{ url_for('invoice_detail', invoice_id=inv.invoice_id) }}">{{ inv.invoice_id }}</a></td>
+        <td>{{ inv.num }}</td>
+        <td>{{ inv.doc_date }}</td>
+        <td>{{ inv.buyer_company.name if inv.buyer_company else '' }}</td>
+        <td>{{ "%.2f"|format(inv.total_amount or 0) }}</td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="5">Пока нет счетов</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

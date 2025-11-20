@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Компании</h2>
+<form method="get">
+    <div class="row">
+        <div style="flex:1">
+            <label>Поиск (название / ИНН-КПП / контакт)</label>
+            <input type="text" name="q" value="{{ q|e }}">
+        </div>
+        <div><label>&nbsp;</label>
+            <button class="btn btn-secondary" type="submit">Искать</button>
+        </div>
+        <div><label>&nbsp;</label><a class="btn btn-primary" href="{{ url_for('companies_create') }}">+ Новая
+            компания</a></div>
+    </div>
+</form>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>ИНН/КПП</th>
+        <th>Email</th>
+        <th>Контакт</th>
+        <th></th>
+    </tr>
+    {% for it in items %}
+    <tr>
+        <td>{{ it.company_id }}</td>
+        <td>{{ it.name }}</td>
+        <td>{{ it.inn_kpp or "" }}</td>
+        <td>{{ it.email or "" }}</td>
+        <td>{{ it.contact_name or "" }}</td>
+        <td>
+            <a class="btn btn-secondary" href="{{ url_for('companies_edit', company_id=it.company_id) }}">Ред.</a>
+            <form method="post" action="{{ url_for('companies_delete', company_id=it.company_id) }}"
+                  style="display:inline" onsubmit="return confirm('Удалить?')">
+                {{ csrf_token() }}
+                <button class="btn btn-danger" type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="6">Не найдено</td>
+    </tr>
+    {% endfor %}
+</table>
+<div class="pagination">
+    {% for p in range(1, pages+1) %}
+    {% if p == page %}<span class="active">{{ p }}</span>
+    {% else %}<a href="{{ url_for('companies_list', page=p, per_page=per_page, q=q) }}">{{ p }}</a>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
