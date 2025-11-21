@@ -50,7 +50,7 @@
         <th>Ед.</th>
         <th>Вес</th>
         <th>Срок годн., дн.</th>
-        <th></th>
+        <th>Условия хранения</th>
     </tr>
     {% for it in items %}
     <tr>
@@ -59,14 +59,7 @@
         <td>{{ it.unit }}</td>
         <td>{{ it.weight or '' }}</td>
         <td>{{ it.shelf_life_days or '' }}</td>
-        <td>
-            <a class="btn btn-secondary" href="{{ url_for('products_edit', sku=it.sku) }}">Ред.</a>
-            <form method="post" action="{{ url_for('products_delete', sku=it.sku) }}" style="display:inline"
-                  onsubmit="return confirm('Удалить?')">
-                {{ csrf_token() }}
-                <button class="btn btn-danger" type="submit">Удалить</button>
-            </form>
-        </td>
+        <td>{{ it.storage_conditions or '' }}</td>
     </tr>
     {% else %}
     <tr>

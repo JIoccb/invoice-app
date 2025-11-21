@@ -21,7 +21,7 @@
         <th>ИНН/КПП</th>
         <th>Email</th>
         <th>Контакт</th>
-        <th></th>
+        <th>Адрес</th>
     </tr>
     {% for it in items %}
     <tr>
@@ -30,14 +30,7 @@
         <td>{{ it.inn_kpp or "" }}</td>
         <td>{{ it.email or "" }}</td>
         <td>{{ it.contact_name or "" }}</td>
-        <td>
-            <a class="btn btn-secondary" href="{{ url_for('companies_edit', company_id=it.company_id) }}">Ред.</a>
-            <form method="post" action="{{ url_for('companies_delete', company_id=it.company_id) }}"
-                  style="display:inline" onsubmit="return confirm('Удалить?')">
-                {{ csrf_token() }}
-                <button class="btn btn-danger" type="submit">Удалить</button>
-            </form>
-        </td>
+        <td>{{ it.address or "" }}</td>
     </tr>
     {% else %}
     <tr>
