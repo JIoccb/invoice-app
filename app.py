@@ -1,20 +1,3 @@
-# app.py
-"""
-Invoice App — Flask + SQLAlchemy 2.0 (разнесено по файлам)
-
-Запуск:
-  pip install "Flask>=3" "SQLAlchemy>=2" psycopg2-binary Flask-WTF WTForms \
-    email-validator bleach Flask-Talisman python-dotenv
-
-  # Подготовьте .env (или задайте переменные окружения):
-  # DATABASE_URL=postgresql+psycopg2://user:pass@localhost:5432/yourdb
-  # SECRET_KEY=change-me
-
-  python app.py
-
-По умолчанию, если DATABASE_URL не задан, используется SQLite: invoice_app.sqlite3
-"""
-
 from __future__ import annotations
 
 import os
@@ -52,12 +35,6 @@ csrf = CSRFProtect(app)
 
 @app.teardown_appcontext
 def cleanup_sessions(exception=None):
-    """Ensure scoped sessions are removed after each request.
-
-    Without explicit removal, scoped sessions would keep database connections
-    open for the lifetime of the process, eventually exhausting the pool.
-    """
-
     SessionLocal.remove()
 
 Talisman(
@@ -71,7 +48,6 @@ Talisman(
     content_security_policy_nonce_in=["script-src"],
 )
 
-# Создаём таблицы после импорта моделей
 Base.metadata.create_all(bind=engine)
 
 

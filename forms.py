@@ -1,4 +1,3 @@
-# forms.py
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, DecimalField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional as Opt, Email, NumberRange

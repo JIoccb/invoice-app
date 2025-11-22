@@ -1,4 +1,3 @@
-# utils.py
 from __future__ import annotations
 
 import math
@@ -11,7 +10,6 @@ from flask import request
 def sanitize_text(text_value: Optional[str]) -> Optional[str]:
     if text_value is None:
         return None
-    # базовая очистка от HTML (XSS)
     return bleach.clean(text_value, tags=[], strip=True)
 
 

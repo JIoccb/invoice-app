@@ -1,4 +1,3 @@
-# models.py
 from __future__ import annotations
 
 from datetime import date
@@ -94,7 +93,6 @@ class Invoice(Base):
 
     @hybrid_property
     def total_amount(self) -> Decimal:
-        """Сумма по счёту = sum(quantity * price) по всем строкам."""
         total = Decimal("0")
         for line in self.lines:
             q = line.quantity or Decimal("0")
