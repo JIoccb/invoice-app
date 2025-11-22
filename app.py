@@ -37,6 +37,7 @@ csrf = CSRFProtect(app)
 def cleanup_sessions(exception=None):
     SessionLocal.remove()
 
+
 Talisman(
     app,
     content_security_policy=CSP,
