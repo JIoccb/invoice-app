@@ -49,6 +49,17 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-change-me")
 
 csrf = CSRFProtect(app)
 
+
+@app.teardown_appcontext
+def cleanup_sessions(exception=None):
+    """Ensure scoped sessions are removed after each request.
+
+    Without explicit removal, scoped sessions would keep database connections
+    open for the lifetime of the process, eventually exhausting the pool.
+    """
+
+    SessionLocal.remove()
+
 Talisman(
     app,
     content_security_policy=CSP,
@@ -96,6 +107,11 @@ def index():
         top_products=top_products,
         recent_invoices=recent_invoices,
     )
+
+
+@app.route("/about")
+def about_creator():
+    return render_template("about_creator.html")
 
 
 # ------------------------
